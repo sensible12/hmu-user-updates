@@ -1,0 +1,40 @@
+name: hmu
+description: "A new Flutter project."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  encrypt: ^5.0.3
+  firebase_core: ^3.15.2
+  firebase_messaging: ^15.1.6
+  flutter_local_notifications: ^17.2.4
+  geocoding: ^3.0.0
+  geolocator: ^13.0.2
+  go_router: ^14.6.2
+  google_maps_flutter: ^2.10.0
+  http: ^1.2.2
+  pointycastle: ^3.9.1
+  supabase_flutter: ^2.12.2
+  cloud_functions: ^5.6.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: new-hmu-logo.png
+
+flutter:
+  uses-material-design: true
+  assets:
+    - new-hmu-logo.png

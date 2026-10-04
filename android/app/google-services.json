@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "65344077870",
+    "project_id": "hmu-flutter-version",
+    "storage_bucket": "hmu-flutter-version.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:65344077870:android:0d55695461ee16d02bdfbf",
+        "android_client_info": {
+          "package_name": "com.hmucustomer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlYAZQnAwbM5rVw0K-bXwvf81KnXYketo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

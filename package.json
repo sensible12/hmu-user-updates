@@ -1,0 +1,14 @@
+{
+  "name": "hmu-tools",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "seed:firestore": "node scripts/seed-firestore.mjs"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.4.0"
+  },
+  "devDependencies": {
+    "supabase": "^2.84.5"
+  }
+}

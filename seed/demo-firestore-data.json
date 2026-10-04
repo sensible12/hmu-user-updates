@@ -1,0 +1,191 @@
+{
+  "restaurants": [
+    {
+      "id": "urban-bites",
+      "name": "Urban Bites",
+      "description": "Loaded burgers, truffle fries, and late-night shakes.",
+      "rating": 4.8,
+      "dishes": [
+        {
+          "id": "double-smash-burger",
+          "name": "Double Smash Burger",
+          "price_cents": 9900,
+          "tag": "Popular",
+          "description": "Crisp-edged beef patties, cheddar, pickles, and house sauce.",
+          "image_url": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80"
+        },
+        {
+          "id": "loaded-fries",
+          "name": "Loaded Fries",
+          "price_cents": 4500,
+          "tag": "Sides",
+          "description": "Golden fries topped with smoky mayo and spring onion.",
+          "image_url": "https://images.unsplash.com/photo-1576107232684-1279f390859f?w=400&q=80"
+        },
+        {
+          "id": "vanilla-shake",
+          "name": "Vanilla Shake",
+          "price_cents": 4500,
+          "tag": "Drink",
+          "description": "Creamy vanilla milkshake finished with whipped topping.",
+          "image_url": "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400&q=80"
+        }
+      ],
+      "logo_url": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1200&q=80"
+    },
+    {
+      "id": "green-bowl",
+      "name": "Green Bowl",
+      "description": "Fresh salads, wraps, and bright lunch bowls.",
+      "rating": 4.6,
+      "dishes": [
+        {
+          "id": "chicken-caesar-bowl",
+          "name": "Chicken Caesar Bowl",
+          "price_cents": 8700,
+          "tag": "Fresh",
+          "description": "Grilled chicken, romaine, parmesan, and garlic croutons."
+        },
+        {
+          "id": "avocado-wrap",
+          "name": "Avocado Wrap",
+          "price_cents": 7900,
+          "tag": "Wrap",
+          "description": "Avocado, roasted vegetables, and lime dressing in a warm wrap."
+        },
+        {
+          "id": "green-juice",
+          "name": "Green Juice",
+          "price_cents": 3200,
+          "tag": "Drink",
+          "description": "A cold-pressed blend of apple, cucumber, spinach, and mint."
+        }
+      ],
+      "logo_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=1200&q=80"
+    },
+    {
+      "id": "fire-crust",
+      "name": "Fire Crust Pizza",
+      "description": "Wood-fired pizzas with fast pickup and family combos.",
+      "rating": 4.7,
+      "dishes": [
+        {
+          "id": "pepperoni-pizza",
+          "name": "Pepperoni Pizza",
+          "price_cents": 16500,
+          "tag": "Hot",
+          "description": "Stone-baked pizza layered with pepperoni and mozzarella.",
+          "image_url": "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=80"
+        },
+        {
+          "id": "garlic-bread",
+          "name": "Garlic Bread",
+          "price_cents": 4000,
+          "tag": "Sides",
+          "description": "Toasted slices with garlic butter and herbs.",
+          "image_url": "https://images.unsplash.com/photo-1573140247632-f8fd74997d5c?w=400&q=80"
+        },
+        {
+          "id": "family-combo",
+          "name": "Family Combo",
+          "price_cents": 24900,
+          "tag": "Deal",
+          "description": "Two pizzas, garlic bread, and drinks for sharing."
+        }
+      ],
+      "logo_url": "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1200&q=80"
+    },
+    {
+      "id": "sugar-cloud",
+      "name": "Sugar Cloud",
+      "description": "Desserts, coffee, and sweet afternoon snacks.",
+      "rating": 4.5,
+      "dishes": [
+        {
+          "id": "chocolate-waffle",
+          "name": "Chocolate Waffle",
+          "price_cents": 6800,
+          "tag": "Dessert",
+          "description": "Warm waffle with chocolate sauce and berries."
+        },
+        {
+          "id": "iced-latte",
+          "name": "Iced Latte",
+          "price_cents": 3500,
+          "tag": "Coffee",
+          "description": "Chilled espresso with silky milk over ice."
+        },
+        {
+          "id": "berry-cheesecake",
+          "name": "Berry Cheesecake",
+          "price_cents": 7200,
+          "tag": "Popular",
+          "description": "Creamy cheesecake topped with bright berry compote."
+        }
+      ],
+      "logo_url": "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=1200&q=80"
+    }
+  ],
+  "users": [
+    {
+      "id": "demo-customer-001",
+      "email": "demo@hmucustomer.app",
+      "name": "Demo Customer",
+      "role": "customer"
+    }
+  ],
+  "orders": [
+    {
+      "id": "demo-order-001",
+      "customer_id": "demo-customer-001",
+      "restaurant_id": "urban-bites",
+      "status": "completed",
+      "total_cents": 18900,
+      "delivery_fee_cents": 2500,
+      "created_at": "2026-03-29T17:30:00.000Z",
+      "items_json": [
+        {
+          "name": "Double Smash Burger",
+          "quantity": 1,
+          "price_cents": 9900,
+          "image_url": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80"
+        },
+        {
+          "name": "Loaded Fries",
+          "quantity": 1,
+          "price_cents": 4500,
+          "image_url": "https://images.unsplash.com/photo-1576107232684-1279f390859f?w=400&q=80"
+        },
+        {
+          "name": "Vanilla Shake",
+          "quantity": 1,
+          "price_cents": 4500,
+          "image_url": "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400&q=80"
+        }
+      ]
+    },
+    {
+      "id": "demo-order-002",
+      "customer_id": "demo-customer-001",
+      "restaurant_id": "fire-crust",
+      "status": "on_the_way",
+      "total_cents": 24500,
+      "delivery_fee_cents": 2500,
+      "created_at": "2026-03-30T10:15:00.000Z",
+      "items_json": [
+        {
+          "name": "Pepperoni Pizza",
+          "quantity": 1,
+          "price_cents": 16500,
+          "image_url": "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=80"
+        },
+        {
+          "name": "Garlic Bread",
+          "quantity": 2,
+          "price_cents": 4000,
+          "image_url": "https://images.unsplash.com/photo-1573140247632-f8fd74997d5c?w=400&q=80"
+        }
+      ]
+    }
+  ]
+}
