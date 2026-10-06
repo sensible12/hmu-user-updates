@@ -10,7 +10,11 @@ Expected tables:
 
 Apply schema:
 1. Open Supabase SQL Editor
-2. Run `supabase/migrations/20260331_init.sql`
+2. Run the files in `supabase/migrations/` in filename order.
+
+Account deletion:
+- Apply `20261006_add_account_deletion.sql` to enable the in-app Delete Account action.
+- The action permanently removes the signed-in user's HMU account, profile, ratings, and customer order history. External payment providers may retain their own transaction records.
 
 Remote push notifications:
 1. Deploy the Supabase Edge Function in `supabase/functions/send-order-status/`

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../../core/services/account_service.dart';
 import '../../../../core/services/supabase_service.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -15,6 +16,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   User? user;
   String? userName;
   bool loadingProfile = true;
+  bool deletingAccount = false;
 
   @override
   void initState() {
@@ -70,8 +72,63 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  Future<void> deleteAccount() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Delete account permanently?'),
+        content: const Text(
+          'This permanently deletes your HMU account, profile details, saved '
+          'location, ratings, and order history stored by HMU. This cannot be '
+          'undone. M-Pesa or other external providers may retain their own '
+          'transaction records.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: Theme.of(dialogContext).colorScheme.error,
+              foregroundColor: Theme.of(dialogContext).colorScheme.onError,
+            ),
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: const Text('Delete permanently'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !mounted) {
+      return;
+    }
+
+    setState(() => deletingAccount = true);
+    try {
+      await AccountService.deleteCurrentAccount();
+      if (mounted) {
+        context.go('/auth');
+      }
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Unable to delete account: $error')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => deletingAccount = false);
+      }
+    }
+  }
+
   String getAvatarUrl() {
-    final name = userName ?? user?.userMetadata?['name']?.toString() ?? user?.email ?? 'U';
+    final name =
+        userName ??
+        user?.userMetadata?['name']?.toString() ??
+        user?.email ??
+        'U';
     return 'https://ui-avatars.com/api/?name=${Uri.encodeComponent(name)}';
   }
 
@@ -129,14 +186,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final scheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
     final headerSurface = isDark ? const Color(0xFF18181B) : scheme.surface;
-    final cardSurface = isDark ? const Color(0xFF202024) : scheme.surfaceContainerHigh;
-    final accentSurface = isDark ? const Color(0xFF2A2022) : scheme.surfaceContainerHighest;
+    final cardSurface = isDark
+        ? const Color(0xFF202024)
+        : scheme.surfaceContainerHigh;
+    final accentSurface = isDark
+        ? const Color(0xFF2A2022)
+        : scheme.surfaceContainerHighest;
     final strongTextColor = isDark ? const Color(0xFFF5F5F7) : scheme.onSurface;
-    final mutedTextColor = isDark ? const Color(0xFFB7B7C0) : scheme.onSurfaceVariant;
-    final softBorderColor = isDark ? const Color(0xFF34343A) : scheme.outlineVariant;
-    final shadowColor = Colors.black.withValues(
-      alpha: isDark ? 0.26 : 0.08,
-    );
+    final mutedTextColor = isDark
+        ? const Color(0xFFB7B7C0)
+        : scheme.onSurfaceVariant;
+    final softBorderColor = isDark
+        ? const Color(0xFF34343A)
+        : scheme.outlineVariant;
+    final shadowColor = Colors.black.withValues(alpha: isDark ? 0.26 : 0.08);
 
     return Scaffold(
       body: SafeArea(
@@ -220,7 +283,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                    color: scheme.primary.withValues(alpha: 0.35),
+                                    color: scheme.primary.withValues(
+                                      alpha: 0.35,
+                                    ),
                                     width: 2,
                                   ),
                                 ),
@@ -236,10 +301,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   children: [
                                     Text(
                                       displayName,
-                                      style: theme.textTheme.headlineSmall?.copyWith(
-                                        color: strongTextColor,
-                                        fontWeight: FontWeight.w800,
-                                      ),
+                                      style: theme.textTheme.headlineSmall
+                                          ?.copyWith(
+                                            color: strongTextColor,
+                                            fontWeight: FontWeight.w800,
+                                          ),
                                     ),
                                     if (loadingProfile)
                                       Padding(
@@ -269,8 +335,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                       decoration: BoxDecoration(
                                         color: accentSurface,
-                                        borderRadius: BorderRadius.circular(999),
-                                        border: Border.all(color: softBorderColor),
+                                        borderRadius: BorderRadius.circular(
+                                          999,
+                                        ),
+                                        border: Border.all(
+                                          color: softBorderColor,
+                                        ),
                                       ),
                                       child: Text(
                                         memberLabel,
@@ -398,7 +468,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
-                        onPressed: signOut,
+                        onPressed: deletingAccount ? null : signOut,
                         icon: const Icon(Icons.logout),
                         label: const Text('Sign Out'),
                         style: ElevatedButton.styleFrom(
@@ -409,6 +479,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ? scheme.error.withValues(alpha: 0.95)
                               : null,
                           elevation: isDark ? 0 : null,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      width: double.infinity,
+                      child: TextButton.icon(
+                        onPressed: deletingAccount ? null : deleteAccount,
+                        icon: deletingAccount
+                            ? const SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const Icon(Icons.delete_forever_outlined),
+                        label: Text(
+                          deletingAccount
+                              ? 'Deleting account...'
+                              : 'Delete Account',
+                        ),
+                        style: TextButton.styleFrom(
+                          foregroundColor: scheme.error,
                         ),
                       ),
                     ),
@@ -473,18 +567,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(height: 3),
                       Text(
                         subtitle,
-                        style: TextStyle(
-                          color: mutedTextColor,
-                          fontSize: 13,
-                        ),
+                        style: TextStyle(color: mutedTextColor, fontSize: 13),
                       ),
                     ],
                   ),
                 ),
-                Icon(
-                  Icons.chevron_right,
-                  color: mutedTextColor,
-                ),
+                Icon(Icons.chevron_right, color: mutedTextColor),
               ],
             ),
           ),
