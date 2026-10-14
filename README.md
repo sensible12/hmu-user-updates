@@ -61,4 +61,20 @@ Test flow:
 2. Place an order
 3. Update that order row's `order_status` in Supabase
 4. The Supabase Edge Function sends a push to the saved device tokens
+
+## App compliance and legal pages
+
+The app includes the required legal documents for Google Play compliance and a working account-deletion flow:
+- [privacy-policy.html](./privacy-policy.html)
+- [terms-and-conditions.html](./terms-and-conditions.html)
+- [account-deletion.html](./account-deletion.html)
+
+For Play Console, use the hosted legal URLs:
+- Privacy Policy: `https://sites.google.com/view/hmu-privacy-policy/home`
+- Terms and Conditions: `https://sites.google.com/view/hmu-terms-and-conditions/home`
+- Account deletion: `https://sites.google.com/view/hmu-deletion-process/home`
+
+The app links to the Privacy Policy from the auth flow and uses the account
+deletion URL as the external deletion resource. The local HTML copies remain in
+the repository for reference.
 # hmu-user-updates

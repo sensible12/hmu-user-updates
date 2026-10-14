@@ -1,8 +1,25 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../../../../core/legal/legal_links.dart';
 
 class AuthGatewayScreen extends StatelessWidget {
   const AuthGatewayScreen({super.key});
+
+  Future<void> _openLegalLink(BuildContext context, Uri uri) async {
+    if (!context.mounted) {
+      return;
+    }
+
+    final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (!launched && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Unable to open the legal page.')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +68,36 @@ class AuthGatewayScreen extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              const Text(
-                'By continuing, you agree to our Terms and Privacy Policy.',
+              RichText(
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 12, color: Colors.grey),
+                text: TextSpan(
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  children: [
+                    const TextSpan(text: 'By continuing, you agree to our '),
+                    TextSpan(
+                      text: 'Terms',
+                      style: const TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () =>
+                            _openLegalLink(context, LegalLinks.terms),
+                    ),
+                    const TextSpan(text: ' and '),
+                    TextSpan(
+                      text: 'Privacy Policy',
+                      style: const TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () =>
+                            _openLegalLink(context, LegalLinks.privacy),
+                    ),
+                    const TextSpan(text: '.'),
+                  ],
+                ),
               ),
             ],
           ),

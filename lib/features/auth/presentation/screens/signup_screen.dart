@@ -1,7 +1,10 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../core/legal/legal_links.dart';
 import '../../../../core/services/network_error_service.dart';
 import '../../../../core/services/push_notification_service.dart';
 import '../../../../core/services/supabase_service.dart';
@@ -103,26 +106,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  void showTermsAndConditions() {
-    showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Terms and Conditions'),
-        content: const SingleChildScrollView(
-          child: Text(
-            'To provide HMU services, we save the information you submit, including your name, phone number, email address, delivery details, order history, payment transaction details, support requests, and relevant device or notification data. We use this information to create and secure your account, process orders, provide deliveries, send service updates, and improve support.\n\n'
-            'Food is prepared and supplied by individual restaurants. Each restaurant is responsible for the quality, safety, ingredients, allergens, and any food poisoning or allergic reaction connected to its food. HMU is a delivery platform and is not the food manufacturer or restaurant. To the extent permitted by applicable law, claims, charges, or liability for those matters must be directed to the responsible restaurant and not against the HMU platform.\n\n'
-            'By creating an account, you confirm that you have read and accepted these Terms and Conditions.',
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Close'),
-          ),
-        ],
-      ),
-    );
+  Future<void> _openLegalLink(Uri uri) async {
+    final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (!launched && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Unable to open the legal page.')),
+      );
+    }
   }
 
   @override
@@ -204,20 +194,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.only(top: 12),
-                      child: Wrap(
-                        children: [
-                          const Text('I agree to the '),
-                          InkWell(
-                            onTap: showTermsAndConditions,
-                            child: const Text(
-                              'Terms and Conditions',
-                              style: TextStyle(
+                      child: RichText(
+                        text: TextSpan(
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          children: [
+                            const TextSpan(text: 'I agree to the '),
+                            TextSpan(
+                              text: 'Terms',
+                              style: const TextStyle(
                                 decoration: TextDecoration.underline,
                                 fontWeight: FontWeight.w600,
+                                color: Colors.blue,
                               ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () =>
+                                    _openLegalLink(LegalLinks.terms),
                             ),
-                          ),
-                        ],
+                            const TextSpan(text: ' and '),
+                            TextSpan(
+                              text: 'Privacy Policy',
+                              style: const TextStyle(
+                                decoration: TextDecoration.underline,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.blue,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () =>
+                                    _openLegalLink(LegalLinks.privacy),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
