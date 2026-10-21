@@ -33,18 +33,18 @@ class DriverArrivalMessagingService : FirebaseMessagingService() {
             "Your order is ready for pickup now."
         }
 
-        val fullScreenIntent = Intent(this, DriverArrivalActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val launchIntent = Intent(this, MainActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             putExtra(DriverArrivalActivity.EXTRA_EVENT_TYPE, "driver_arrival")
             putExtra(DriverArrivalActivity.EXTRA_ORDER_ID, orderId)
             putExtra(DriverArrivalActivity.EXTRA_DRIVER_NAME, driverName)
             putExtra(DriverArrivalActivity.EXTRA_SERVICE_TYPE, serviceType)
         }
 
-        val fullScreenPendingIntent = PendingIntent.getActivity(
+        val contentPendingIntent = PendingIntent.getActivity(
             this,
             orderId.hashCode(),
-            fullScreenIntent,
+            launchIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
 
@@ -52,13 +52,11 @@ class DriverArrivalMessagingService : FirebaseMessagingService() {
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle("Your order is here")
             .setContentText(body)
-            .setPriority(NotificationCompat.PRIORITY_MAX)
-            .setCategory(NotificationCompat.CATEGORY_CALL)
-            .setAutoCancel(false)
-            .setOngoing(true)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_EVENT)
+            .setAutoCancel(true)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setFullScreenIntent(fullScreenPendingIntent, true)
-            .setContentIntent(fullScreenPendingIntent)
+            .setContentIntent(contentPendingIntent)
             .build()
 
         NotificationManagerCompat.from(this).notify(orderId.hashCode(), notification)
@@ -75,8 +73,10 @@ class DriverArrivalMessagingService : FirebaseMessagingService() {
             "Driver Arrival Alerts",
             NotificationManager.IMPORTANCE_HIGH
         ).apply {
-            description = "Urgent alerts when an order has arrived"
+            description = "Alerts when an order has arrived"
             lockscreenVisibility = android.app.Notification.VISIBILITY_PUBLIC
+            enableVibration(true)
+            enableLights(true)
         }
 
         manager.createNotificationChannel(channel)
